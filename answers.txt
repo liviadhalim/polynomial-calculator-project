@@ -1,0 +1,133 @@
+CSE 331 Homework 4.  Answers to Written questions.
+Edit this file to supply your answers.
+
+Name:  Livia Halim
+
+Problem 0.
+Addition: 
+r = p + q:
+set r = q by making a term-by-term copy of all terms in q to r
+foreach term, tp, in p:
+if any term, tr, in r has the same degree as tp,
+then replace tr in r with the sum of tp and tr
+else insert tp into r as a new term
+
+(a) r = p * q
+    set r = q by making a term-by-term copy of all terms in q to r
+    for each term, tp, in p:
+        multiply the coefficient with all tr in r.
+        add the exponent to all tr in r. 
+    Sum up all the polynomial combinations and replace r with that value. 
+    
+(b) p / q with q!= 0 to get p = q * s + r
+    Initialize s as 0 and copy each term in p to r. 
+    while r is not 0 and the degree of r >= degree of q.
+        Term t to be the leading term of r divided by the leading term in q. 
+        Add t to s. 
+        Multiply t with all the terms in q and subtract it from r.
+    return the value of s and r with s being the result and r being the remainder. 
+
+(c) Illustrate your division algorithm running on this example: (x^3+x-1) / (x+1) = x^2-x+2
+p = (x^3+x-1) 
+q = (x+1)
+s = 0 
+we copy p into r, r= (x^3+x-1)
+[while r is not 0 and the degree of r >= degree of q.] YES, r = (x^3+x-1) and 3 >= 1
+	[Term t to be the leading term of r divided by the leading term in q.] 
+	t = x^3/x = x^2
+	[Add t to s.]
+	s = x^2
+	[Multiply t with all the terms in q and subtract it from r.]
+	r=  (x^3+x-1)
+	    (x^3 + x^2)
+	    ___________ - 
+	    -x^2 + x - 1
+[while r is not 0 and the degree of r >= degree of q.]   YES, r = -x^2 + x - 1 and 2 >= 1
+	[Term t to be the leading term of r divided by the leading term in q.] 
+	t = -x^2/x = -x
+	[Add t to s.]
+	s = x^2 - x
+	[Multiply t with all the terms in q and subtract it from r.]
+	r=  (-x^2+ x - 1)
+	    (-x^2 -x)
+	    ___________ - 
+	    2x - 1
+[while r is not 0 and the degree of r >= degree of q.]   YES, r = 2x-1 and 1 >= 1
+	[Term t to be the leading term of r divided by the leading term in q.] 
+	t = 2x / x = 2
+	[Add t to s.]
+	s = x^2 - x + 2
+	[Multiply t with all the terms in q and subtract it from r.]
+	r=  (2x - 1)
+	    (2x + 2)
+	    ___________ - 
+	    -3
+[while r is not 0 and the degree of r >= degree of q.] NO, r = 2x-1 but 0 >= 1 is false. 
+[return the value of s and r with s being the result and r being the remainder.] We then return x^2 - x + 2 and -3.
+
+Problem 1.
+
+(a) In order to satisfy the new rep invariant
+   1. Removing gcd from constructor RatNum(int, int) because we do not need to check if it's in reduced form.
+     -> more efficient since it can now construct a RatNum in O(1).
+      
+   2. Using gcd inside the method of equals, hashCode, and toString in order to return true 
+      or same hashcode for same rational number. 
+      -> less efficient 
+
+For the execution, I think the original one will run faster, because the constructor is the only one that
+will make it to reduced form and the original code is also clearer since RatNum constructor will always give 
+us reduced form.
+
+(b)  It fails to meet the specification since 
+   1. the clause "modifies" does not appear in the specification
+   2. the new method makes RatNum represent mutable rational number which violates the class specification
+      that RatNum should be immutable.
+
+
+(c)CheckRep at the end of constructor is sufficient to hold rep invariant
+   because: 1. RatNum class does not have a mutator method
+            2. Instance variables of RatNum are declared as final (can only be 
+               initialized once)
+            3. All arithmetic methods return a new RatNum object without 
+               modifying the original ones.
+
+
+Problem 2.
+
+(a) I only included a call to checkRep at the end of constructor because:
+   1. there's no mutator method in the class
+   2. Instance variables are declared as final (can only be initialized once)
+   3. All methods of arithmetic, such as differentiate and antidifferentiate 
+     return a new RatTerm object without modifying the original ones.
+
+
+(b)  We need to change the constructor because if the coefficient is 0,
+     we need to keep the value of the expt to be the e argument instead of 0.
+     Furthermore, the isZero method is not allowed to compare values with ZERO variable because the ZERO variable has 0 in the exponent. 
+     Thus, we need to check if the coefficient is 0 or not. 
+     
+     This allows the code to run a little faster because the isZero method checks for when the coefficient is 0 
+     instead of using the equals method. 
+     The code clarity also stays the same because we know that whatever the exponent is, 
+     if the coefficient is 0, then that term will become 0.
+
+
+
+(c) We need to change the constructor to have another else if statement to check if the coefficient is NaN. 
+    Then we have to make the exponent 0. 
+    Furthermore, this allows us to use this.equals(NaN) in the isNaN() method. 
+    Also, the performance and code clarity will remain the same because no matter what the value of the exponent is, 
+    if the coefficient is NaN, then it will be NaN.
+   
+    I prefer to have both rep invariants since they avoid confusion of different
+    representations of terms, such as 0*x^5 or NaN*x^8, when calling methods of 
+    add, sub, mul, or div. 
+
+
+Problem 5.
+My four favorite polynomial equations are: 
+x^5 + x + 12
+1/6x^6 + 1/2x^2 + 12x
+5x^4+1
+20x^3 + 6
